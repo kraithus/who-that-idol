@@ -11,6 +11,8 @@ player.play('files/test-real.mp4')
 player.wait_until_playing()
 
 font = ImageFont.truetype('DejaVuSans.ttf', 40)
+fillColor = "white"
+shadowColor = "black"
 
 while not player.core_idle:
 
@@ -35,9 +37,27 @@ while not player.core_idle:
             name = x['name']
             startTime = x['startTime']
             endTime = x['endTime']
+            x, y = 10, 10
 
             if startTime < ts < endTime:
-                d.text((10, 10), f'{name}', font=font, fill=(0, 255, 255, 128))
+                """
+                Code ripped from here: https://mail.python.org/pipermail/image-sig/2009-May/005681.html
+                Yeah had to know how to get PIL to give me text with a shadow outline
+                I really do not get it all but alas, it works... I hope.
+                """
+                # thin border
+                d.text((x - 3, y), f'{name}', font=font, fill=shadowColor)
+                d.text((x + 3, y), f'{name}', font=font, fill=shadowColor)
+                d.text((x, y - 3), f'{name}', font=font, fill=shadowColor)
+                d.text((x, y + 3), f'{name}', font=font, fill=shadowColor)
+
+                # thicker border
+                d.text((x - 3, y - 3), f'{name}', font=font, fill=shadowColor)
+                d.text((x + 3, y - 3), f'{name}', font=font, fill=shadowColor)
+                d.text((x - 3, y + 3), f'{name}', font=font, fill=shadowColor)
+                d.text((x + 3, y + 3), f'{name}', font=font, fill=shadowColor)
+
+                d.text((x, y), f'{name}', font=font, fill=fillColor)
 
         # I have no fucking idea don't ask me
         overlay.update(img)
